@@ -1,0 +1,9 @@
+autosupport invoke -node liyang-01 -type all -uri file:///mroot/etc/log/liyang_01.7z
+
+autosupport invoke -node liyang-02 -type all -uri file:///mroot/etc/log/liyang_02.7z
+
+system node autosupport history show -node liyang-01
+
+system node autosupport history show -node liyang-02
+
+https://ip/spi/

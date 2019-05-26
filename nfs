@@ -1,0 +1,14 @@
+liyang::> vserver create -vserver nfs -rootvolume root1-aggregate liyang01 -rootvolume-security-style unix
+liyang::> vol create -vserver nfs -volume nfs01 -size 100g -aggregate liyang01 -junction-path /nfs
+liyang::> net int create -vserver nfs -lif nfs -home-node liyang-01 -home-port e0c -role data -data-protocol nfs,cifs -address 192.168.8.45 -netmask 255.255.255.0
+
+liyang::> vserver nfs create -access true -v3 enabled -v4.0 disabled -tcp enabled -vserver cifsli
+liyang::> vserver nfs modify -showmount enabled
+liyang::> vserver nfs show 
+
+liyang::> export-policy create -policyname liyang -vserver nfs
+liyang::> export-policy rule create -vserver nfs -policyname default -protocol nfs3 -clientmatch 0.0.0.0/0 -rorule  none -rwrule none -superuser none
+liyang::> export-policy rule create -vserver nfs -policyname liyang -protocol nfs3 -clientmatch 0.0.0.0/0 -rorule any -rwrule any -superuser any
+liyang::> vol modify -volume vol2 -policy liyang
+liyang::>export-policy rule show -policyname liyang -instance
+liyang::> vol show -fields policy

@@ -1,0 +1,39 @@
+cmode环境：
+
+
+::>storage show disk -broken
+
+::>run local            切换到本地节点
+
+以下命令和7mode相同：
+
+node>disk show -v       查看坏盘的owner（system id）
+ node>sysconfig    查看主机号和system id
+
+node>sysconfig -a
+
+node>aggr status -f     查看坏盘位置（xx.xx）
+
+node>storage show disk -p    查看多路径的状态
+
+node>aggr status -v     查看aggr的状态
+
+node>led_on xx.xx      如果坏盘没有点亮故障灯需要用此命令
+
+更换磁盘：
+
+node>disk show -n       查看在disk里面是否有没有
+
+node>disk assign xx.xx    如果没有assign硬盘，需要用此命令assign磁盘（在查看之前的硬盘归属的机头做此操作）
+
+node>aggr status -f    查看坏盘是否还存在
+
+node>aggr status -s    查看spare盘
+
+node>disk zero spares    如果新盘没有零化，需要手动
+
+node>aggr status -r    查看整个aggr的状态是否正常
+
+nas3020a> priv set advanced   #退出advanced模式：priv set 
+nas3020a*> options autosupport   #查看autosupport状态；
+nas3020a*> options autosupport.enable on　#打开autosupport；

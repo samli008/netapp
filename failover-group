@@ -1,0 +1,10 @@
+#failover-group:
+
+network interface failover-groups create -vserver shlab3 -failover-group clus_mgmt -targets shlab3-01:e0M,shlab3-02:e0M
+
+network interface failover-groups show
+
+#modify lif map to failover-group:
+
+net int modify -vserver shlab3 -lif cluster_mgmt -failover-group clus_mgmt
+net int show -fields failover-group

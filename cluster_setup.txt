@@ -1,0 +1,71 @@
+cluster setup
+
+node show -fields serialnumber
+
+version
+version -b
+
+#license
+license add xxxxxxxxxxxxxxx
+license show
+
+#timezone
+shlab3::> timezone Asia/Shanghai
+shlab3::> timezone 
+shlab3::> date
+
+NTP:
+
+cluster time-service ntp server create -server 172.16.1.92
+cluster time-service ntp server sho
+
+
+DNS:
+
+dns create -vserver shlab3 -domains remotelab.net -name-servers 172.16.1.92
+dns show
+
+Route
+network route show
+
+SP:
+
+shlab2::> sp network modify -node FAS2240-02 -address-family IPv4 -ip-address 172.16.1.74 -netmask 255.255.254.0 -gateway 172.16.1.1 -enable true
+
+sp net show -fields ip 
+
+#check cdpd:
+run  * -command options cdpd.enable on
+run  * -command options cdpd.enable
+run * -command cdpd show-neighbors
+
+#check switchless config
+set adv #set admin
+
+switchless-cluster show
+
+health status show
+
+#update ontap:
+storage failover modify -node * -auto-giveback false
+storage failover show -node * -fields  auto-giveback
+system node image show
+
+system node image update -node <Node B> -package http://<web_server>/image.tgz -
+setdefault true
+shlab2::> system node image modify -node shlab2-01 -image image2 -isdefault true
+
+storage failover takeover -ofnode shlab3-01
+storage failover giveback -ofnode shlab3-01
+storage failover show
+storage failover modify -node * -auto-giveback true
+
+#create data aggr
+shlab3::> aggr create -aggregate shlab3_02_aggr1 -diskcount 7 -raidtype raid_dp -maxraidsize 7 -node shlab3-02
+
+#modify cluster info:
+shlab3::> cluster identity modify -name shlab2 
+shlab2::> node rename -node FAS2240-01 -newname shlab2-01 
+shlab2::> aggr rename -aggregate aggr0 -newname aggr0_shlab2_01
+shlab2::> run -node shlab2-01 -command disk show
+Shlab2::*>security login password -username admin -vserver xxxx

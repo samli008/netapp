@@ -1,0 +1,10 @@
+broadcast-domain remove-ports -broadcast-domain Default -ports shlab3-01:e0e,shlab3-01:e0f,shlab3-02:e0e,shlab3-02:e0f
+
+ifgrp create -node shlab3-01 -ifgrp a0a -mode singlemode -distr-func ip
+ifgrp add-port -node shlab3-01 -ifgrp a0a -port e0e
+ifgrp add-port -node shlab3-01 -ifgrp a0a -port e0f
+
+broadcast-domain add-ports -broadcast-domain Default -ports shlab3-01:a0a,shlab3-02:a0a
+
+network port ifgrp show
+broadcast-domain show

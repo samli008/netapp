@@ -1,0 +1,53 @@
+##set -confirmations off
+
+##1. 创建存放LUN的卷
+###创建卷（多预留10%的空间，如扩容512，则分配570）
+vol create -vserver svm_zj_san_1 -volume vol102_srsdb   -aggregate n2_aggr1 -size 215g -state online -policy default -security-style unix -space-guarantee volume
+
+vol show -vserver svm_zj_san_1 -volume *_srsdb -fields policy，security-style，space-guarantee
+
+##2. 关闭卷上快照策略
+vol modify -vserver svm_zj_san_1 -volume vol102_srsdb   -snapshot-policy none  -fractional-reserve 0 -autosize-mode grow -autosize true -percent-snapshot-space 0
+
+vol show -vserver svm_zj_san_1 -volume *_srsdb -fields fractional-reserve,snapshot-policy,autosize-mode,autosize,max-autosize,percent-snapshot-space
+
+#关卷的精简和压缩
+set advanced
+efficiency off -vserver svm_zj_san_1 -volume vol102_srsdb  
+efficiency undo -vserver svm_zj_san_1 -volume vol102_srsdb   -compression true -dedupe true 
+efficiency undo -vserver svm_zj_san_1 -volume vol102_srsdb   -date-compaction true 
+
+##3. 删除卷上已有的快照
+set advanced
+snap delete -vserver svm_zj_san_1 -volume vol102_srsdb   -snapshot * -force true
+
+snap list
+set admin
+
+##4. 创建NETAPP LUN
+lun create -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun1 -ostype aix -size 64g -space-reserve enabled
+lun create -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun2 -ostype aix -size 64g -space-reserve enabled
+lun create -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun3 -ostype aix -size 64g -space-reserve enabled
+
+lun show -vserver svm_zj_san_1 -path *srsdb*
+
+##5. 创建LUN MAPPING（查看igroup是否存在，不存在需要新建后再mapping）
+lun map -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun1    -igroup SRS01DB -lun-id 105
+lun map -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun2    -igroup SRS01DB -lun-id 106
+lun map -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun3    -igroup SRS01DB -lun-id 107
+
+
+lun map -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun1    -igroup SRS02DB -lun-id 105
+lun map -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun2    -igroup SRS02DB -lun-id 106
+lun map -vserver svm_zj_san_1 -path /vol/vol102_srsdb/lun3    -igroup SRS02DB -lun-id 107
+
+
+lun show -m -vserver svm_zj_san_1 -path *srsdb*
+
+
+lun show -vserver svm_zj_san_1 -path *srsdb*
+lun show -m -vserver svm_zj_san_1 -path *srsdb*
+
+igroup show -vserver svm_zj_san_1 -igroup SRS01DB -v
+
+##set -confirmations on

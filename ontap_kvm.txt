@@ -1,0 +1,37 @@
+Please Support The Ontap Simulator In Kvm Virtualization And Not Just Vmware
+
+I was able to get the 9.5 simulator working in QEMU/KVM. I used virsh manage it.  
+1. Convert vmdk's to qcow2 format using qemu-img
+2. Move qcow2 files to a location where virt-manager can find them or browse to
+3. Create your vm in virt-manager and select import disk option
+4. Add disk one 
+5. Set memory to no less than 5 gb of ram and cpu to no less than 2
+6. Name it and select customize
+7. Add remaining qcow2 disks and make sure they are all ide
+8. Add 3 more NICs that are e1000 
+9. Make sure you change from Spice to VNC
+10. Boot VM
+11. When "CTRL-C for boot menu", hit CTRL-C
+12. In boot menu select option 4 (disk have been setup for vmware and we need to zero those out)
+13. Follow all netapp procedures from there
+
+This worked fine for me using both in virt-manager and virsh using Ontap 9.5. 
+
+tar xvf vsim-esx-DOT9.4-cm_nodar.ova 
+qemu-img convert -O qcow2 vsim-esx-DOT9.4-cm-disk1.vmdk disk1
+qemu-img convert -O qcow2 vsim-esx-DOT9.4-cm-disk2.vmdk disk2
+qemu-img convert -O qcow2 vsim-esx-DOT9.4-cm-disk3.vmdk disk3
+qemu-img convert -O qcow2 vsim-esx-DOT9.4-cm-disk4.vmdk disk4
+
+cat node.sh
+virt-install --name=ontap1 --vcpus=2 --ram=8192 --os-type=linux \
+--import --disk path=/kvm/node/disk1,bus=ide \
+--import --disk path=/kvm/node/disk2,bus=ide \
+--import --disk path=/kvm/node/disk3,bus=ide \
+--import --disk path=/kvm/node/disk4,bus=ide \
+--network "bridge=br6,model=e1000" \
+--network "bridge=br6,model=e1000" \
+--network "bridge=br6,model=e1000" \
+--network "bridge=br6,model=e1000" \
+--graphics vnc,password=liyang,port=5947,listen=0.0.0.0 \
+--noautoconsole --noreboot

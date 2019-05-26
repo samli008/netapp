@@ -1,0 +1,70 @@
+destination_cluster::> snapmirror policy create -vserver dvs1 -policy
+exclude_LIF -type async-mirror 
+
+destination_cluster::> snapmirror create -source-path vs1: -destination-path dvs1: -
+type DP -throttle unlimited -policy DPDefault -schedule hourly -identity-preserve true
+
+
+The following command creates the SVM disaster recovery relationship with the SVM names
+as the -destination-vserver and -source-vserver parameters:
+
+destination_cluster::> snapmirror create -source-vserver vs1 -destination-vserver dvs1
+-type DP -throttle unlimited -policy DPDefault -schedule hourly -identity-preserve true
+
+创建Cluster Peer
+
+创建目标端的SVM
+1. destination_cluster::> vserver create -vserver dvs1 -subtype dp-destination
+2. destination_cluster::> vserver show
+
+创建Vserver Peer
+1. destination_cluster::> vserver peer create -vserver dvs1 -peer-vserver vs1 -applications
+snapmirror -peer-cluster source_cluster
+
+2. source_cluster::> vserver peer accept -vserver vs1 -peer-vserver dvs1
+
+3. destination_cluster::> vserver peer show
+
+创建SVM-DR snapmirror关系
+
+1. destination_cluster::> snapmirror create -source-vserver vs1 -destination-vserver dvs1
+-type DP -throttle unlimited -policy DPDefault -schedule hourly -identity-preserve true
+
+2. destination_cluster::>snapmirror show
+
+3. destination_cluster::>snapmirror initialize -destination-path dvs1:
+
+正向切割
+1.
+destination_cluster::> snapmirror quiesce -destination-path dvs1:
+2.
+destination_cluster::> snapmirror break -destination-path dvs1:
+3.
+source_cluster::> vserver stop -vserver vs1
+4.
+destination_cluster::> vserver start -vserver dvs1
+
+5. 修改目标端lif ip地址和home port，以及dvs1的路由信息
+
+反向保护
+1. 
+source_cluster::> snapmirror create -source-vserver dvs1 -destination-vserver vs1 -
+type DP -throttle unlimited -policy DPDefault -schedule hourly -identity-preserve true
+2. 
+source_cluster::> snapmirror resync vs1:
+
+切回到源
+1. 
+destination_cluster::> vserver stop -vserver dvs1
+2.
+source_cluster::> snapmirror update -destination-path vs1:
+3.
+source_cluster::> snapmirror quiesce -destination-path vs1:
+4.
+source_cluster::> snapmirror break -destination-path vs1:
+5. 
+source_cluster::> vserver start -vserver vs1
+
+重新保护
+1. 
+destination_cluster::> snapmirror resync dvs1:

@@ -1,0 +1,16 @@
+liyang::> vserver create -vserver iscsi -rootvolume root1 -aggregate liyang01 -rootvolume-security-style unix
+liyang::> net int create -vserver iscsi -lif iscsi -home-node liyang-01 -home-port e0c -role data -data-protocol iscsi -address 192.168.8.45 -netmask 255.255.255.0
+liyang::> net int create -vserver iscsi -lif iscsi1 -home-node liyang-02 -home-port e0c -role data -data-protocol iscsi -address 192.168.8.46 -netmask 255.255.255.0
+liyang::> vol create -vserver iscsi -volume iscsi01 -size 100g -aggregate liyang01 -junction-path /iscsi
+liyang::> lun create -vserver iscsi -volume iscsi01 -lun lun1 -size 80g -ostype windows
+
+liyang::> iscsi create -vserver iscsi -target-alias netapp9
+liyang::> lun igroup create -vserver iscsi -igroup li -protocol iscsi -ostype windows
+liyang::> lun igroup add -vserver iscsi -igroup li -initiator iqn.1991-05.com.microsoft:2008
+liyang::> lun map -vserver iscsi -path /vol/iscsi01/lun1 -igroup li
+
+liyang::> igroup show
+liyang::> iscsi show
+liyang::> iscsi interface show
+liyang::> lun show
+Liyang::>lun mapping show

@@ -1,0 +1,14 @@
+1. power on filer ctrl + c boot menu.
+2. press 7 reinstall ontap setup e0M IP reboot from http server download ontap image for install.
+3. reboot filer ctrl+c boot menu press 5 maintenance: 
+   ha-config show #check ha status
+   sysconfig     #view systemid
+   aggr offline aggr0
+   aggr destroy aggr0
+   disk show      #check disk owner
+   disk unpartition a0.00.1 #need disk owner
+   disk remove_ownership -s systemid
+   disk assign 0a.11.* -s systemid
+   disk assign 0a.12.* -s systemid
+  
+4. reboot filer ctrl+c boot menu press 4 initialization filer zero disk.
