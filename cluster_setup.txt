@@ -49,11 +49,12 @@ health status show
 #update ontap:
 storage failover modify -node * -auto-giveback false
 storage failover show -node * -fields  auto-giveback
-system node image show
 
-system node image update -node <Node B> -package http://<web_server>/image.tgz -
-setdefault true
-shlab2::> system node image modify -node shlab2-01 -image image2 -isdefault true
+cluster image package get -url http://192.168.1.121/96P3_q_image.tgz
+cluster image show
+cluster image package show-repository 
+cluster image update -version 9.6P3 
+cluster image show-update-progress
 
 storage failover takeover -ofnode shlab3-01
 storage failover giveback -ofnode shlab3-01
