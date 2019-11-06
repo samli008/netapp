@@ -50,6 +50,7 @@ health status show
 storage failover modify -node * -auto-giveback false
 storage failover show -node * -fields  auto-giveback
 
+set adv
 cluster image package get -url http://192.168.1.121/96P3_q_image.tgz
 cluster image show
 cluster image package show-repository 
@@ -60,6 +61,9 @@ storage failover takeover -ofnode shlab3-01
 storage failover giveback -ofnode shlab3-01
 storage failover show
 storage failover modify -node * -auto-giveback true
+
+#coredump login sp exec follow command and http://vip/spi
+system core
 
 #create data aggr
 shlab3::> aggr create -aggregate shlab3_02_aggr1 -diskcount 7 -raidtype raid_dp -maxraidsize 7 -node shlab3-02
