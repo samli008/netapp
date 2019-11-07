@@ -59,6 +59,7 @@ cluster image show-update-progress
 
 storage failover takeover -ofnode shlab3-01
 storage failover giveback -ofnode shlab3-01
+storage failover giveback-show 
 storage failover show
 storage failover modify -node * -auto-giveback true
 
