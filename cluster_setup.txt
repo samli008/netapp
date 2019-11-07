@@ -65,6 +65,15 @@ storage failover modify -node * -auto-giveback true
 #coredump login sp exec follow command and http://vip/spi
 system core
 
+#upgrade fw DQP
+M3F2C10_A700S::*> storage firmware download -node M2F2C03_A700S-02  -package-url http://10.183.48.200/qual_devices.zip
+Firmware download started. 
+Unpacking package contents.                                               
+Firmware downloaded. 
+
+run -node M2F2C03_A700S-02
+rdfile /etc/qual_devices_v3
+
 #create data aggr
 shlab3::> aggr create -aggregate shlab3_02_aggr1 -diskcount 7 -raidtype raid_dp -maxraidsize 7 -node shlab3-02
 
