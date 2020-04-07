@@ -1,0 +1,8 @@
+# modify root volume
+ly::> vol show
+ly::> aggr show
+ly::> run -node ly-01
+ly-01> priv set advanced
+ly-01*> snap sched vol0 0
+ly-01*> vol size vol0 600M 
+
