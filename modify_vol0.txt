@@ -7,3 +7,6 @@ ly-01*> snap sched vol0 0
 ly-01*> snap reserve -V vol0 0
 ly-01*> vol size vol0 600M 
 
+# view aggr snapshot size
+ly-01>  df -A -h 
+
