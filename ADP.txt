@@ -1,0 +1,11 @@
+# list partition
+DS900::> run -node DS900-01
+DS900-01> aggr status -r
+
+# remove data partition
+DS900::> set adv
+DS900::*> storage disk removeowner -disk 1.0.0 -data true
+
+# assign data partitioning
+run -node local_node disk assign -s partner_sysid disk_device_p_num
+DS900::*> run -node DS900-01 disk assign -s 538113952 0b.00.0P1

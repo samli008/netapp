@@ -1,0 +1,6 @@
+# view snapmirror
+snapmirror show
+# stop snapmirror
+snapmirror quiesce -destination-path SVM01:*
+# start snapmirror
+snapmirror resume -destination-path SVM01:*

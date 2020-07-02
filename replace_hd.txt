@@ -20,6 +20,9 @@ node>aggr status -v     查看aggr的状态
 
 node>led_on xx.xx      如果坏盘没有点亮故障灯需要用此命令
 
+disk option show -fields autoassign
+disk option modify -node * -autoassign off
+
 更换磁盘：
 
 node>disk show -n       查看在disk里面是否有没有

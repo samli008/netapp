@@ -1,0 +1,3 @@
+# create vlan add to a0a
+s46file100::*> vlan create -node s46file100a -vlan-name a0a-46
+s46file100::*> vlan show
