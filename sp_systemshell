@@ -1,4 +1,7 @@
-#login sp
+#login sp naroot for 7m; admin for cm;
+system console 
+ctrl+D
+system power cycle
 sp reboot
 #login ontap
 sp show
