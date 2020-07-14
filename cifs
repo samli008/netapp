@@ -1,3 +1,14 @@
+# major setup
+1. aggr create
+2. svm create
+3. volume create
+4. data lif create
+5. cifs create
+6. cifs share create
+7. cifs user create
+8. cifs share access-control create
+9. volume modify security-style ntfs
+
 liyang::> aggr create -aggregate shlab3_02_aggr1 -diskcount 7 -raidtype raid_dp -maxraidsize 7 -node shlab3-02
 liyang::> vserver create -vserver cifs -rootvolume root1-aggregate liyang01 -rootvolume-security-style unix
 liyang::> vol create -vserver cifs -volume vol1 -size 100g -aggregate liyang01 -junction-path /cifs
