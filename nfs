@@ -1,3 +1,4 @@
+liyang::> aggr create -aggregate shlab3_02_aggr1 -diskcount 7 -raidtype raid_dp -maxraidsize 7 -node shlab3-02
 liyang::> vserver create -vserver nfs -rootvolume root1-aggregate liyang01 -rootvolume-security-style unix
 liyang::> vol create -vserver nfs -volume nfs01 -size 100g -aggregate liyang01 -junction-path /nfs
 liyang::> net int create -vserver nfs -lif nfs -home-node liyang-01 -home-port e0c -role data -data-protocol nfs,cifs -address 192.168.8.45 -netmask 255.255.255.0
