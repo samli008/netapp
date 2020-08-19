@@ -12,3 +12,4 @@ DS900::*> run -node DS900-01 disk assign -s 538113952 0b.00.0P1
 
 # not ADP
 LOADER>setenv root-uses-shared-disks? false
+LOADER>saveenv
