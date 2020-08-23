@@ -12,8 +12,8 @@ cdlab::*> storage disk show
 cdlab::*> storage disk removeowner -disk 1.0.1 -data true
 
 # assign data partitioning on node shell mode
-cdlab::*> run -node cdlab-01
-cdlab-01> disk assgin -s 1883820596 0b.00.1P1
+cdlab::*> run -node cdlab-02
+cdlab-02> disk assgin -s 1947119288 0b.00.1P1
 
 # not ADP
 LOADER>setenv root-uses-shared-disks? false
