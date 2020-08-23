@@ -8,6 +8,7 @@ cdlab-01> disk show -n
 cdlab::> disk option show -fields autoassign
 cdlab::> disk option modify -node * -autoassign off
 cdlab::> set adv
+cdlab::*> storage disk show
 cdlab::*> storage disk removeowner -disk 1.0.1 -data true
 
 # assign data partitioning on node shell mode
