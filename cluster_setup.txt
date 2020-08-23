@@ -78,6 +78,7 @@ rdfile /etc/qual_devices_v3
 
 #create data aggr
 shlab3::> aggr create -aggregate shlab3_02_aggr1 -diskcount 7 -raidtype raid_dp -maxraidsize 7 -node shlab3-02
+cdlab::> aggr add-disk -aggregate aggr0_delab_02 -disklist 1.0.10
 
 #modify cluster info:
 shlab3::> cluster identity modify -name shlab2 
