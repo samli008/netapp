@@ -40,3 +40,5 @@ node>aggr status -r    查看整个aggr的状态是否正常
 nas3020a> priv set advanced   #退出advanced模式：priv set 
 nas3020a*> options autosupport   #查看autosupport状态；
 nas3020a*> options autosupport.enable on　#打开autosupport；
+
+cdlab::> disk fail -immediate true 1.0.10
