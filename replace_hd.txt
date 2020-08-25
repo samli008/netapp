@@ -51,3 +51,11 @@ Original Owner: cdlab-01
     Disk            Outage Reason  HA Shelf Bay  /Slot Chan   Pool  Type    RPM     Size     Size
     --------------- ------------- --- ----- --- ------ ---- ------ ----- ------ -------- --------
     1.0.10          admin failed   0a     0  10   -/-     A FAILED  BSAS   7200   1.62TB   1.62TB
+
+cdlab::> disk show -broken 
+Original Owner: cdlab-01                                              
+  Checksum Compatibility: block
+                                                Drawer                            Usable Physical
+    Disk            Outage Reason  HA Shelf Bay  /Slot Chan   Pool  Type    RPM     Size     Size
+    --------------- ------------- --- ----- --- ------ ---- ------ ----- ------ -------- --------
+    1.0.10          admin failed   0a     0  10   -/-     A FAILED  BSAS   7200   1.62TB   1.62TB
