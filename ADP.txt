@@ -1,8 +1,12 @@
 # list partition on node shell
 cdlab::> run -node cdlab-01
+cdlab-01> sysconfig -a
 cdlab-01> sysconfig -r
 cdlab-01> disk show -v
 cdlab-01> disk show -n
+cdlab-01> aggr status -r
+cdlab-01> aggr status -s
+cdlab-01> aggr status -f
 
 # remove data partition on cluster shell advanced mode
 cdlab::> disk option show -fields autoassign
