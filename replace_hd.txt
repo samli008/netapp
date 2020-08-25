@@ -59,3 +59,13 @@ Original Owner: cdlab-01
     Disk            Outage Reason  HA Shelf Bay  /Slot Chan   Pool  Type    RPM     Size     Size
     --------------- ------------- --- ----- --- ------ ---- ------ ----- ------ -------- --------
     1.0.10          admin failed   0a     0  10   -/-     A FAILED  BSAS   7200   1.62TB   1.62TB
+
+cdlab::> set adv  
+cdlab::*> storage disk unfail -disk 1.0.10
+
+Warning: Failed disk "1.0.10" may have aggregate labels and file system data present. In that case, this command will attempt to bring this disk back into the
+         aggregate with which this disk had formerly been associated and preserve file system data. Are you sure you want to continue with disk unfail?
+          {y|n}: y
+
+cdlab::*> disk show -broken               
+There are no entries matching your query.
