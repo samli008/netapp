@@ -41,4 +41,13 @@ nas3020a> priv set advanced   #退出advanced模式：priv set
 nas3020a*> options autosupport   #查看autosupport状态；
 nas3020a*> options autosupport.enable on　#打开autosupport；
 
+# demo disk fail
 cdlab::> disk fail -immediate true 1.0.10
+
+cdlab::> storage show disk -broken 
+Original Owner: cdlab-01                                              
+  Checksum Compatibility: block
+                                                Drawer                            Usable Physical
+    Disk            Outage Reason  HA Shelf Bay  /Slot Chan   Pool  Type    RPM     Size     Size
+    --------------- ------------- --- ----- --- ------ ---- ------ ----- ------ -------- --------
+    1.0.10          admin failed   0a     0  10   -/-     A FAILED  BSAS   7200   1.62TB   1.62TB
