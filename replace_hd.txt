@@ -1,6 +1,5 @@
 cmode环境：
 
-
 ::>storage show disk -broken
 
 ::>run local            切换到本地节点
