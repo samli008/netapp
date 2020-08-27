@@ -7,7 +7,6 @@ cmode环境：
 以下命令和7mode相同：
 
 node>disk show -v       查看坏盘的owner（system id）
- node>sysconfig    查看主机号和system id
 
 node>sysconfig -a
 
