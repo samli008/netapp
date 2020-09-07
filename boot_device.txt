@@ -1,0 +1,154 @@
+# takeover impaired node
+
+cdlab::> run local sysconfig
+cdlab::> storage failover show
+cdlab::> storage failover show -node cdlab-02 -fields auto-giveback
+cdlab::> storage failover modify -node cdlab-02 -auto-giveback false
+
+cdlab::> storage failover takeover -bynode cdlab-02
+
+# netboot from http server
+
+Starting AUTOBOOT press Ctrl-C to abort...
+
+Autoboot the image aborted by user.
+
+
+LOADER-A> printenv bootarg.init.boot_clustered
+
+Variable Name        Value
+-------------------- --------------------------------------------------
+bootarg.init.boot_clustered *** Undefined ***
+
+LOADER-A> setenv bootarg.init.boot_cluster true
+LOADER-A> setenv bootart.init.switchless_cluster.enable true
+LOADER-A> setenv partner-sysid 194742288
+LOADER-A> savenv
+
+LOADER-A> printenv
+
+bootarg.init.boot_cluster true
+bootart.init.switchless_cluster.enable true
+partner-sysid        194742288
+
+LOADER-A> ifconfig e0M -addr=192.168.6.29 -mask=255.255.255.0 -gw=192.168.6.1
+
+Device e0M: 
+    hwaddr 00-A0-98-60-08-B1, ipaddr 192.168.6.29, mask 255.255.255.0
+    gateway 192.168.6.1, nameserver not set
+    speed 1000 full duplex, loopback not supported
+
+LOADER-A> ping 192.168.6.42
+192.168.6.42 (192.168.6.42) is alive
+192.168.6.42 (192.168.6.42): 1 packets sent, 1 received
+
+LOADER-A> netboot http://192.168.6.42/netboot/kernel
+
+Loading 192.168.6.42/netboot/kernel:......0x200000/14891680 0x1033aa0/13845536 Entry at 0x802d6c30
+Found 192.168.6.42/netboot/SB_XIX/platform.rc
+Loading 192.168.6.42/netboot/platform.ko:....0x1d68000/3034816 0x204d000/477888 0x20c1ac0/583568 
+Loading 192.168.6.42/netboot/rootfs.img:........................0x2151000/311645696 
+Loading 192.168.6.42/netboot/platfs2g.img:...........................0x14a87000/378969088 
+Closing network.
+Starting program at 0x802d6c30
+NetApp Data ONTAP 9.4P3
+md0: Preloaded image <192.168.6.42/netboot/rootfs.img> 311645696 bytes at 0xffffffff82151000
+md1: Preloaded image <192.168.6.42/netboot/platfs2g.img> 378969088 bytes at 0xffffffff94a87000
+Copyright (C) 1992-2018 NetApp.
+All rights reserved.
+*******************************
+*                             *
+* Press Ctrl-C for Boot Menu. *
+*                             *
+*******************************
+
+^CThe Boot Menu will be presented because an alternate boot method was specified.
+Starting DHCP client on e0M
+open: Read-only file system
+
+Please choose one of the following:
+
+(1) Normal Boot.
+(2) Boot without /etc/rc.
+(3) Change password.
+(4) Clean configuration and initialize all disks.
+(5) Maintenance mode boot.
+(6) Update flash from backup config.
+(7) Install new software first.
+(8) Reboot node.
+(9) Configure Advanced Drive Partitioning.
+Selection (1-9)? 7
+
+This procedure will replace existing Data ONTAP software with new software.
+Do you want to continue? {y|n} y
+
+What is the URL for the package? http://192.168.6.42/94P3_q_nodar_image.tgz
+What is the user name on "192.168.6.42", if any? 
+
+
+**************************************************************
+*             Restore Backup Configuration                   *
+*  This procedure only applies to storage controllers that   *
+*  are configured as an HA pair.                             *
+*                                                            *
+*  Choose Yes to restore the 'varfs' backup configuration    *
+*  from a SSH server.  Refer to the Boot Device Replacement  *
+*  guide for more details.                                   *
+*  Choose No to skip the back up recovery and return to the  *
+*  boot menu.                                                *
+**************************************************************
+
+Do you want to restore the backup configuration
+now? {y|n} y
+
+*******************************************************************
+* Perform the restore backup procedure on this node's HA partner. *
+*******************************************************************
+
+Was the restore backup procedure successful? {y|n}  y
+
+The restore configuration has been copied
+from the HA partner to this node,
+would you like to use this restored copy
+now? {y|n} y
+Boot device: /dev/da0 found...
+Checking /dev/da0s1 file system... success.
+Mounting /dev/da0s1 to /cfcard... success.
+Checking /cfcard/x86_64/freebsd mount point... success.
+Gzip checking /var/home/root/varfs.tgz... success.
+Restoring backup configuration... 
+Failed to restore backup configuration.
+System id mismatch. This backup configuration does not belong to this machine.
+If the problem persists, please contact Customer Support.
+WARNING: System ID does not match. This may be caused by changing the node's head
+
+Do you still
+want to continue? {y|n} y
+Boot device: /dev/da0 found...
+Checking /cfcard/x86_64/freebsd mount point... success.
+Backup Configuration from Mon Jul  1 04:24:48 UTC 2019 successfully restored
+Attempting to restore /var/kmip to the boot device
+Successfully restored /var/kmip to the boot device
+Attempting to restore env file to the boot device
+Successfully restored env file to the boot device
+
+The node must be rebooted to start using the newly installed software. Do you
+want to reboot now? {y|n} 
+
+# partner node restore config to impaired node
+
+cdlab::> set adv
+
+Warning: These advanced commands are potentially dangerous; use them only when
+         directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+ 
+cdlab::*> system node restore-backup -node cdlab-02 -target-address 192.168.6.29
+
+mount_partner...success.
+scp /partner/etc/varfs.tgz root@192.168.6.29:/var/home/root/ success.
+scp /partner/etc/env root@192.168.6.29:/var/home/root/ success.
+unmount /partner success.
+
+cdlab::*> set adm
+cdlab::> storage failover giveback -fromnode cdlab-02
