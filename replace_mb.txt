@@ -1,4 +1,3 @@
-
 ******（before replace MB）******
  
 *********************************************************************************************************************************
@@ -34,14 +33,13 @@
    loader>boot_ontap menu  #goto maintanance mode
 
        *>fcadmin config 
-        *>fcadmin channels 
+       *>fcadmin channels 
        *>storage show disk -p 
        *>disk_list
        *>disk show -v
        *>halt
        LOADER>
        
-
 ******（after replace MB）******
 
 1. label cabling
@@ -70,24 +68,23 @@ Override system id? {y|n} [n] y
         *>sldiag version 
         *>sldiag device show
 
-           *>sldiag device modify -selection disable -dev sas
-           *>sldiag device modify -selection disable -dev fcal
-           *>sldiag device modify -selection disable -dev nic
-           *>sldiag device modify -selection disable -dev acpm
-           *>sldiag device modify -selection disable -dev fcache
-           *>sldiag device modify -selection disable -dev cna
+        *>sldiag device modify -selection disable -dev sas
+        *>sldiag device modify -selection disable -dev fcal
+        *>sldiag device modify -selection disable -dev nic
+        *>sldiag device modify -selection disable -dev acpm
+        *>sldiag device modify -selection disable -dev fcache
+        *>sldiag device modify -selection disable -dev cna
 
-
-           *>sldiag device modify -selection disable -dev mem
-           *>sldiag device show
-           *>sldiag device run
-           *>sldaig devcie status
-           *>fcadmin config
-           *>fcadmin config -t <initiator / target>
-           *>fcadmin channels
-           *>storage show disk -p
-           *>disk_list
-           *>disk show -v
+        *>sldiag device modify -selection disable -dev mem
+        *>sldiag device show
+        *>sldiag device run
+        *>sldaig devcie status
+        *>fcadmin config
+        *>fcadmin config -t <initiator / target>
+        *>fcadmin channels
+        *>storage show disk -p
+        *>disk_list
+        *>disk show -v
 
 4. console connect to partner node; check target node bad disk.
     clustername::>run local
@@ -115,14 +112,13 @@ Override system id? {y|n} [n] y
 
        waiting for giveback(ctrl-c to abort....)
 
-
 6. console connect to partner node
        
-      clustername::>storage failover show
+   clustername::>storage failover show
 
-      clustername::>storage failover giveback -fromnode <partnernode>
+   clustername::>storage failover giveback -fromnode <partnernode>
 
-    clustername::> storage failover show-giveback            
+   clustername::> storage failover show-giveback            
                    Partner
     Node           Aggregate         Giveback Status
     -------------- ----------------- ---------------------------------------------
