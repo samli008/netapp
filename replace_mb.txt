@@ -1,0 +1,159 @@
+
+******（before replace MB）******
+ 
+*********************************************************************************************************************************
+# target node is bad node.
+# partner node is health node
+# nodeshell clustershell
+  
+   clustername::>run local
+   nodename>
+   nodename>exit
+*********************************************************************************************************************************
+
+# replace MB must on loader mode, console cable connect to partner node.
+
+      clustername::>storage failover show
+   
+      clustername::>storage failover show -node local -fields auto-giveback
+
+      clustername::> storage failover modify -node local -auto-giveback false
+               
+      clustername::>storage failover takeover -bynode <partnernode>
+
+# console cable connect to targetnode; check status
+
+      waiting for giveback(ctrl-c to abort....)
+      Ctrl + C
+      loader>
+
+3. loader>show date
+   loader>sp status
+   loader>printenv
+
+   loader>boot_ontap menu  #goto maintanance mode
+
+       *>fcadmin config 
+        *>fcadmin channels 
+       *>storage show disk -p 
+       *>disk_list
+       *>disk show -v
+       *>halt
+       LOADER>
+       
+
+******（after replace MB）******
+
+1. label cabling
+2. swap mem boot_device battery PCI_card to new controller MB
+3. insert new controller 
+
+    Starting AUTOBOOT press Ctrl-C to abort...
+   
+    loader>
+    
+    loader>show date
+    loader>set date mm/dd/yyyy
+    loader>set time hh:mm:ss
+    loader>sp status
+    loader>update_flash
+    loader>bye
+
+    Starting AUTOBOOT press Ctrl-C to abort...
+   
+    loader>
+    loader>boot_diags
+        WARNING: System id mismatch. This usually occurs when replacing CF or NVRAM cards!
+Override system id? {y|n} [n] y
+
+        *>
+        *>sldiag version 
+        *>sldiag device show
+
+           *>sldiag device modify -selection disable -dev sas
+           *>sldiag device modify -selection disable -dev fcal
+           *>sldiag device modify -selection disable -dev nic
+           *>sldiag device modify -selection disable -dev acpm
+           *>sldiag device modify -selection disable -dev fcache
+           *>sldiag device modify -selection disable -dev cna
+
+
+           *>sldiag device modify -selection disable -dev mem
+           *>sldiag device show
+           *>sldiag device run
+           *>sldaig devcie status
+           *>fcadmin config
+           *>fcadmin config -t <initiator / target>
+           *>fcadmin channels
+           *>storage show disk -p
+           *>disk_list
+           *>disk show -v
+
+4. console connect to partner node; check target node bad disk.
+    clustername::>run local
+    xxxxxx（takeover）>partner aggr status -f
+    xxxxxx（takeover）>priv set advanced
+    xxxxxx（takeover)*>disk reassign -s old_systemID -d new_systemID
+    xxxxxx（takeover)*>priv set
+    xxxxxx（takeover)>exit
+    clustername::>
+    clustername::>
+
+5. console connect to partner node review systemID
+       *>disk show -v
+       
+       *>halt
+
+       loader>printenv
+       loader>setenv partner-sysid 12345677
+       loader>setenv bootarg.init.boot_clustered true
+       loader>savenv
+       loader>printenv
+       
+       loader>boot_ontap
+...........................
+
+       waiting for giveback(ctrl-c to abort....)
+
+
+6. console connect to partner node
+       
+      clustername::>storage failover show
+
+      clustername::>storage failover giveback -fromnode <partnernode>
+
+    clustername::> storage failover show-giveback            
+                   Partner
+    Node           Aggregate         Giveback Status
+    -------------- ----------------- ---------------------------------------------
+    Lab-01
+                     -                 No aggregates to give back （说明giveback已经完成）
+    Lab-02
+                     -                 No aggregates to give back （说明giveback已经完成）
+    2 entries were displayed.
+
+    Lab::> storage failover show        
+                                  Takeover          
+    Node           Partner        Possible State   
+    -------------- -------------- -------- -------------------------------------
+     Lab-01         Lab-02         true     Connected to Lab-02
+     Lab-02         Lab-01         true     Connected to Lab-01
+     2 entries were displayed.
+
+      Lab::> cluster show
+      Node                  Health  Eligibility
+     --------------------- ------- ------------
+      Lab-01                true    true
+      Lab-02                true    true
+      2 entries were displayed.
+      
+   ********************************************************************************************************
+
+      clustername::>net int show -is-home false
+      clustername::>net int revert *
+
+ ********************************************************************************************************************************************* 
+    
+     clustername::>storage failover modify -node local -enabled true
+
+     clustername::>invoke * -type all -message 5xxxxxx (trigger ASUP， 5xxxxxx FSO number）
