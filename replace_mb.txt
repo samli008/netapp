@@ -150,6 +150,6 @@ Override system id? {y|n} [n] y
 
  ********************************************************************************************************************************************* 
     
-     clustername::>storage failover modify -node local -enabled true
+     clustername::>storage failover modify -auto-giveback true -node *
 
      clustername::>invoke * -type all -message 5xxxxxx (trigger ASUP， 5xxxxxx FSO number）
