@@ -34,5 +34,10 @@ options nis.enable off
 savecore
 
 # create aggr
-aggr create <aggr-name> -r 3 -t raid4 6
-aggr status <aggr-name> -r
+aggr create aggr1 -r 3 -t raid4 6
+aggr create aggr1 -r 3 -t raid4 -d 0a.03 0a.04 0a.06
+aggr status aggr1 -r
+
+# extend aggr
+aggr add aggr1 -n 2
+aggr add aggr1 -d 0b.06
