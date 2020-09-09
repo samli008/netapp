@@ -33,3 +33,6 @@ options dns.enable off
 options nis.enable off
 savecore
 
+# create aggr
+aggr create <aggr-name> -r 3 -t raid4 6
+aggr status <aggr-name> -r
