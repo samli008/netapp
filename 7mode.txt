@@ -1,0 +1,3 @@
+# enable HA need reboot filer
+options cf.mode ha
+
