@@ -103,4 +103,3 @@ fas2240b>restore_backup 192.168.6.29
 fas2240b>cf giveback
 version –b
 version
-注意：netboot只能用e0a，e0b两个interface
