@@ -79,6 +79,7 @@ nas3020a*>rdfile /etc/log/autosupport/201104120009.0  #读取日志文件
 
 # CompactFlash更换或者更新：
 引导的过程：loader-->compactflash-->root vol  (loader是在主板上)
+config http server; download 824_q_netboot.tgz 824_q_image.tgz
 
 fas2240a>version
 fas2240a>rdfile /etc/rc
