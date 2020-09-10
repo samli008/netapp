@@ -41,3 +41,37 @@ aggr status aggr1 -r
 # extend aggr
 aggr add aggr1 -n 2
 aggr add aggr1 -d 0b.06
+
+# autosupport
+nas3020a> priv set advanced   #退出advanced模式：priv set 
+nas3020a*> options autosupport   #查看autosupport状态；
+nas3020a*> options autosupport.enable on　#打开autosupport；
+nas3020a*>date  #查看日期，日志文件会以日期加零命名，如：201104120006.0  
+nas3020a*> options autosupport.doit /etc/log/autosupport
+nas3020a*>ls /etc/log/autosupport  #查找日志文件：201104120006.0
+nas3020a*>rdfile /etc/log/autosupport/201104120009.0  #读取日志文件
+
+# replace MB
+1．在secureCRT中先Transfor-----auto save #保存会话;File---log session（记录会话，保存路径）
+2．做一次autosupport先； 
+3．fcadmin config #查看前端后端，机头到shelf的端口都应该为initiator；
+4．storage show disk -p #查看是否为singlepath还是mutipath；
+5． cf status  #查看HA状态为Cluster enabled, fas3070b is up，必须先在B机头上cf takeover；
+6．进入advanced模式，在机头fas3070b*> cf takeover 接管fas3070a，换A机头；
+7．被更换机头会自动重启到LOADER模式：LOADER>  #这时可以进行物理更换A机头；
+8．物理更换A机头，一定把连接线做好原始状态标注；把旧的compactflash更换到新机头；
+9．启动更换后的新机头时Ctrl+C 进入LOADER> show time
+10．LOADER> set date 04/14/2011
+11．LOADER> set time 23:46:00
+12．LOADER> boot_diags   #跑诊断选择MB
+13．LOADER> autoboot    #进入compactflash卡的Maintenance模式；（Ctrl+C，选择：5）
+14．*> fcadmin config  #查看前端后端状态；
+	*> fcadmin config –t initiator 0a
+	*> fcadmin config –t target 0c     #修改回先前的端口状态；
+15．*> disk show –v   #查看新机头的Local System ID: 118070115
+16．切换到另一个机头Fas3070b(takeover)*> disk reassign -s <old sys-id> -d <new sys-id>   #旧ID为被更换机头的system ID，此处为fas3070a  (118053061)
+17．*> halt
+18．Loader> autoboot
+19．waiting giveback....状态。
+20．Fas3070b(takeover)*> cf giveback　或者　cf giveback –f   #强制giveback
+21．最后再做一个autosupport    #换的哪一个就在哪一个上面autosupport；
