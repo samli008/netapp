@@ -75,3 +75,16 @@ nas3020a*>rdfile /etc/log/autosupport/201104120009.0  #读取日志文件
 19．waiting giveback....状态。
 20．Fas3070b(takeover)*> cf giveback　或者　cf giveback –f   #强制giveback
 21．最后再做一个autosupport    #换的哪一个就在哪一个上面autosupport；
+
+# CompactFlash更换或者更新：
+引导的过程：loadercompactflashroot vol  (loader是在主板上)
+注意：启动过程会有三个地方可以按Ctrl+C
+      第一个Ctrl+C进入loader>
+      第二个Ctrl+C进入boot menu (即compactflash)
+      第三个Ctrl+C中止等待giveback（只有takeover的前提下才会有）
+Loader> ifconfig <interface> –addr=<ip> -mask=<netmask> –gw=<gateway> 　#printenv查看
+Loader> netboot http://<ip>/< 735_netboot.e>  (这里也支持tftp协议) #这里会被takeover
+FAS2050A> download  # kernel files in /etc/boot to the compactflash  #这里需要giveback
+version –b  # verify the version installed on the CompactFlash
+version  # verify current kernel version
+注意：netboot只能用e0a，e0b两个interface
