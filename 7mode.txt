@@ -98,6 +98,7 @@ Loader> ifconfig e0a -addr=192.168.6.29 -mask=255.255.255.0 up
 Loader> netboot http://192.168.6.42/netboot/kernel
 
 # partner node
+fas2240b>restore_backup 192.168.6.29
 fas2240b>cf giveback
 version –b
 version
