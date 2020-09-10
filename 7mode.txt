@@ -66,8 +66,8 @@ nas3020a*>rdfile /etc/log/autosupport/201104120009.0  #读取日志文件
 12．LOADER> boot_diags   #跑诊断选择MB
 13．LOADER> autoboot    #进入compactflash卡的Maintenance模式；（Ctrl+C，选择：5）
 14．*> fcadmin config  #查看前端后端状态；
-	*> fcadmin config –t initiator 0a
-	*> fcadmin config –t target 0c     #修改回先前的端口状态；
+    *> fcadmin config –t initiator 0a
+    *> fcadmin config –t target 0c     #修改回先前的端口状态；
 15．*> disk show –v   #查看新机头的Local System ID: 118070115
 16．切换到另一个机头Fas3070b(takeover)*> disk reassign -s <old sys-id> -d <new sys-id>   #旧ID为被更换机头的system ID，此处为fas3070a  (118053061)
 17．*> halt
