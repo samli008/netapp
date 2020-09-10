@@ -57,6 +57,7 @@ nas3020a*>rdfile /etc/log/autosupport/201104120009.0  #读取日志文件
 3．fcadmin config #查看前端后端，机头到shelf的端口都应该为initiator；
 4．storage show disk -p #查看是否为singlepath还是mutipath；
 5． cf status  #查看HA状态为Cluster enabled, fas3070b is up，必须先在B机头上cf takeover；
+   options cf.giveback.auto.enable off
 6．进入advanced模式，在机头fas3070b*> cf takeover 接管fas3070a，换A机头；
 7．被更换机头会自动重启到LOADER模式：LOADER>  #这时可以进行物理更换A机头；
 8．物理更换A机头，一定把连接线做好原始状态标注；把旧的compactflash更换到新机头；
