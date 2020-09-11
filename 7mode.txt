@@ -61,6 +61,7 @@ license show
 rdfile /etc/exports
 /vol/vol01 -sec=sys,rw,root=192.168.6.231,nosuid
 exportfs -p sec=sys,rw,root=192.168.6.0/24 /vol/vol01
+exportfs -p sec=sys,ro,rw=192.168.100.0/24,root=192.168.100.0/24 /vol/vol01
 exportfs -a
 exportfs -v
 
