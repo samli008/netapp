@@ -39,6 +39,10 @@ aggr create aggr1 -r 3 -t raid4 -d 0a.03 0a.04 0a.06
 aggr status -r aggr1
 aggr show_space -t aggr1
 
+# extend aggr
+aggr add aggr1 -n 2
+aggr add aggr1 -d 0b.06
+
 # create volume
 vol create vol01 aggr1 1t
 vol status vol01
@@ -48,9 +52,9 @@ vol size vol01 -500g
 vol offline vol01
 vol destroy vol01
 
-# extend aggr
-aggr add aggr1 -n 2
-aggr add aggr1 -d 0b.06
+# nfs exports
+rdfile /etc/exports
+/vol/vol01 -sec=sys,rw,root=192.168.6.231,nosuid
 
 # autosupport
 nas3020a> priv set advanced   #退出advanced模式：priv set 
