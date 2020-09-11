@@ -36,7 +36,9 @@ savecore
 # create aggr
 aggr create aggr1 -r 3 -t raid4 6
 aggr create aggr1 -r 3 -t raid4 -d 0a.03 0a.04 0a.06
-aggr status aggr1 -r
+aggr status -r aggr1
+aggr show_space -t aggr1
+
 
 # extend aggr
 aggr add aggr1 -n 2
