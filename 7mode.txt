@@ -52,6 +52,11 @@ vol size vol01 -500g
 vol offline vol01
 vol destroy vol01
 
+# license add
+license add YDPCZTXFLEGEYAAAAAAAAAAAAAAA
+license add KYMRZTXFLEGEYAAAAAAAAAAAAAAA
+license show
+
 # nfs exports
 rdfile /etc/exports
 /vol/vol01 -sec=sys,rw,root=192.168.6.231,nosuid
