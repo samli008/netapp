@@ -60,6 +60,8 @@ license show
 # nfs exports
 rdfile /etc/exports
 /vol/vol01 -sec=sys,rw,root=192.168.6.231,nosuid
+exportfs -a
+exportfs -v
 
 # autosupport
 nas3020a> priv set advanced   #退出advanced模式：priv set 
