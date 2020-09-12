@@ -71,6 +71,13 @@ useradmin user add liyang -g group1
 useradmin user list
 useradmin whoami
 
+# cifs setup
+cifs terminate
+cifs restart
+timezone Asia/Shanghai
+options timed.enable on
+cifs setup
+
 # autosupport
 nas3020a> priv set advanced   #退出advanced模式：priv set 
 nas3020a*> options autosupport   #查看autosupport状态；
