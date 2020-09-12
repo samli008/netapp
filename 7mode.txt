@@ -65,6 +65,12 @@ exportfs -p sec=sys,ro,rw=192.168.100.0/24,root=192.168.100.0/24 /vol/vol01
 exportfs -a
 exportfs -v
 
+# user and group
+useradmin group add group1
+useradmin user add liyang -g group1
+useradmin user list
+useradmin whoami
+
 # autosupport
 nas3020a> priv set advanced   #退出advanced模式：priv set 
 nas3020a*> options autosupport   #查看autosupport状态；
