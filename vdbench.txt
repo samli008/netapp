@@ -73,4 +73,3 @@ rd=run1,wd=(wd1-wd2),iorate=max,elapsed=60,interval=1
 # test vdbench
 ./vdbench -t
 ./vdbench -f test1
-
