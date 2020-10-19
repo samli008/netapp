@@ -1,0 +1,76 @@
+# intall vdbench
+yum -y install java
+tar xzvf vdbench50407.tar.gz
+
+# field define
+hd: host define
+sd: storage define
+wd: workload define
+fsd: filesystem define
+fwd: filesystem workload define
+rd: run define
+
+# vdbench script with test1 on NFS
+hd=default,vdbench=/root/vdbench50407/,user=root,shell=ssh
+hd=hd1,system=c04
+hd=hd2,system=c05
+fsd=fsd1,anchor=/test1,width=1,depth=1,openflags=O_DIRECT,files=50,sizes=10m
+fsd=fsd2,anchor=/test2,width=1,depth=1,openflags=O_DIRECT,files=50,sizes=10m
+fsd=fsd3,anchor=/test3,width=1,depth=1,openflags=O_DIRECT,files=50,sizes=10m
+fsd=fsd4,anchor=/test4,width=1,depth=1,openflags=O_DIRECT,files=50,sizes=10m
+#4k random read
+fwd=fwd1,fsd=fsd1,host=hd1,fileio=random,fileselect=random,xfersizes=4k,operation=read,threads=32
+fwd=fwd2,fsd=fsd2,host=hd1,fileio=random,fileselect=random,xfersizes=4k,operation=read,threads=32
+fwd=fwd3,fsd=fsd3,host=hd2,fileio=random,fileselect=random,xfersizes=4k,operation=read,threads=32
+fwd=fwd4,fsd=fsd4,host=hd2,fileio=random,fileselect=random,xfersizes=4k,operation=read,threads=32
+#4k random write
+fwd=fwd5,fsd=fsd1,host=hd1,fileio=random,fileselect=random,xfersizes=4k,operation=write,threads=32
+fwd=fwd6,fsd=fsd2,host=hd1,fileio=random,fileselect=random,xfersizes=4k,operation=write,threads=32
+fwd=fwd7,fsd=fsd3,host=hd2,fileio=random,fileselect=random,xfersizes=4k,operation=write,threads=32
+fwd=fwd8,fsd=fsd4,host=hd2,fileio=random,fileselect=random,xfersizes=4k,operation=write,threads=32
+#4k random 8:2
+fwd=fwd9,fsd=fsd1,host=hd1,fileio=random,fileselect=random,xfersizes=4k,rdpct=80,threads=32
+fwd=fwd10,fsd=fsd2,host=hd1,fileio=random,fileselect=random,xfersizes=4k,rdpct=80,threads=32
+fwd=fwd11,fsd=fsd3,host=hd2,fileio=random,fileselect=random,xfersizes=4k,rdpct=80,threads=32
+fwd=fwd12,fsd=fsd4,host=hd2,fileio=random,fileselect=random,xfersizes=4k,rdpct=80,threads=32
+#4k sequential read
+fwd=fwd13,fsd=fsd1,host=hd1,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=read,threads=32
+fwd=fwd14,fsd=fsd2,host=hd1,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=read,threads=32
+fwd=fwd15,fsd=fsd3,host=hd2,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=read,threads=32
+fwd=fwd16,fsd=fsd4,host=hd2,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=read,threads=32
+#4k sequential write
+fwd=fwd17,fsd=fsd1,host=hd1,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=write,threads=32
+fwd=fwd18,fsd=fsd2,host=hd1,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=write,threads=32
+fwd=fwd19,fsd=fsd3,host=hd2,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=write,threads=32
+fwd=fwd20,fsd=fsd4,host=hd2,fileio=sequential,fileselect=sequential,xfersizes=4k,operation=write,threads=32
+#4k sequential 4:6
+fwd=fwd21,fsd=fsd1,host=hd1,fileio=sequential,fileselect=sequential,xfersizes=4k,rdpct=40,threads=32
+fwd=fwd22,fsd=fsd2,host=hd1,fileio=sequential,fileselect=sequential,xfersizes=4k,rdpct=40,threads=32
+fwd=fwd23,fsd=fsd3,host=hd2,fileio=sequential,fileselect=sequential,xfersizes=4k,rdpct=40,threads=32
+fwd=fwd24,fsd=fsd4,host=hd2,fileio=sequential,fileselect=sequential,xfersizes=4k,rdpct=40,threads=32
+
+rd=4kread,fwd=(fwd1-fwd4),fwdrate=max,format=yes,elapsed=60,interval=3
+
+# vdbench script with test2 on lun
+hd=default,vdbench=/root/vdbench50407/,user=root,shell=ssh
+hd=hd1,system=c04
+hd=hd2,system=c05
+sd=sd1,host=hd1,lun=/dev/vdb,threads=32
+sd=sd2,host=hd2,lun=/dev/vdb,threads=32
+wd=wd1,sd=sd1,xfersize=4k,rdpct=100,openflags=o_direct
+wd=wd2,sd=sd2,xfersize=4k,rdpct=100,openflags=o_direct
+wd=wd3,sd=sd1,xfersize=4k,rdpct=0,openflags=o_direct
+wd=wd4,sd=sd2,xfersize=4k,rdpct=0,openflags=o_direct
+wd=wd5,sd=sd1,xfersize=4k,rdpct=40,openflags=o_direct
+wd=wd6,sd=sd2,xfersize=4k,rdpct=80,openflags=o_direct
+wd=wd7,sd=sd1,xfersize=4k,seekpct=seq,rdpct=100,openflags=o_direct
+wd=wd8,sd=sd1,xfersize=4k,seekpct=random,rdpct=100,openflags=o_direct
+wd=wd9,sd=sd2,xfersize=4k,seekpct=seq,rdpct=0,openflags=o_direct
+wd=wd10,sd=sd2,xfersize=4k,seekpct=random,rdpct=0,openflags=o_direct
+
+rd=run1,wd=(wd1-wd2),iorate=max,elapsed=60,interval=1
+
+# test vdbench
+./vdbench -t
+./vdbench -f test1
+
