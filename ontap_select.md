@@ -44,5 +44,56 @@ systemctl start openvswitch
 ovs-vsctl add-br br100
 ovs-vsctl add-port br100 eth1
 ovs-vsctl set port eth1 trunks=6,8
+ovs-vsctl clear port eth1 trunks
 ovs-vsctl show
+```
+## setup kvm network
+```
+cat > net.xml << EOF
+<network>
+      <name>br100</name>
+      <forward mode='bridge'/>
+      <bridge name='br100'/>
+      <virtualport type='openvswitch'/>
+      <portgroup name='vlan6'>
+       <vlan>
+        <tag id='6'/>
+       </vlan>
+      </portgroup>
+      <portgroup name='vlan8'>
+       <vlan>
+        <tag id='8'/>
+       </vlan>
+      </portgroup>
+</network>
+EOF
+
+virsh net-define net.xml
+virsh net-start br100
+virsh net-autostart br100
+virsh net-dumpxml br100
+virsh net-list
+
+virsh net-undefine br100
+virsh net-destroy br100
+```
+## setup storage pool on kvm host
+```
+virsh pool-define-as select_pool logical --source-dev /dev/sdb --target=/dev/select_pool
+
+virsh pool-build select_pool
+virsh pool-start select_pool
+virsh pool-autostart select_pool
+virsh pool-list
+
+virsh pool-destroy select_pool
+virsh pool-undefine select_pool
+```
+## deploy vm
+```
+virt-install --name=deploy-kvm --vcpus=2 --ram=4096 \
+--os-type=linux --controller=scsi,model=virtio-scsi \
+--disk path=/kvm/ONTAPdeploy.raw,device=disk,bus=scsi,format=raw \
+--network network=br100,portgroup=vlan6,model=virtio \
+--console=pty --import --wait 0
 ```
