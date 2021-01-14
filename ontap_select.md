@@ -96,4 +96,10 @@ virt-install --name=deploy-kvm --vcpus=2 --ram=4096 \
 --disk path=/kvm/ONTAPdeploy.raw,device=disk,bus=scsi,format=raw \
 --network network=br100,portgroup=vlan6,model=virtio \
 --console=pty --import --wait 0
+
+virsh console deploy
+deploy network show
+host show
+cluster show
+node show
 ```
