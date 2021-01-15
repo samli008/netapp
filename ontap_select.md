@@ -39,7 +39,7 @@ yum -y install openvswitch.rpm
 systemctl enable openvswitch
 systemctl start openvswitch
 ```
-## setup openvswitch
+## basic setup openvswitch
 ```
 ovs-vsctl add-br br100
 ovs-vsctl add-port br100 eth1
@@ -47,7 +47,24 @@ ovs-vsctl set port eth1 trunks=6,8
 ovs-vsctl clear port eth1 trunks
 ovs-vsctl show
 ```
-## setup kvm network
+## two nodes select HA openvswitch setup must two bridge for select role vm
+```
+ovs-vsctl add-br br100
+ovs-vsctl add-br br101
+ovs-vsctl add-port br100 ens224
+ovs-vsctl add-port br101 ens256
+
+ip link set ens224 mtu 9000 up
+ip link set ens256 mtu 9000 up
+ip link set br100 mtu 9000 up
+ip link set br101 mtu 9000 up
+
+ovs-vsctl set port ens256 tag=256
+ovs-vsctl set port br101 trunks=256
+ovs-vsctl set port ens224 tag=224
+ovs-vsctl set port br100 trunks=224
+```
+## setup kvm network only deploy role vm need
 ```
 cat > net.xml << EOF
 <network>
