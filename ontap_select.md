@@ -1,4 +1,18 @@
-## install kvm
+## deploy vm
+```
+virt-install --name=deploy-kvm --vcpus=2 --ram=4096 \
+--os-type=linux --controller=scsi,model=virtio-scsi \
+--disk path=/kvm/ONTAPdeploy.raw,device=disk,bus=scsi,format=raw \
+--network network=br100,portgroup=vlan6,model=virtio \
+--console=pty --import --wait 0
+
+virsh console deploy
+deploy network show
+host show
+cluster show
+node show
+```
+## install kvm on each select nodes
 ```
 yum -y install qemu-kvm qemu-kvm-tools libvirt virt-install bridge-utils virt-manager libguestfs-tools createrepo lrzsz net-tools lshw
 
@@ -106,17 +120,8 @@ virsh pool-list
 virsh pool-destroy select_pool
 virsh pool-undefine select_pool
 ```
-## deploy vm
+## aggr create on select
 ```
-virt-install --name=deploy-kvm --vcpus=2 --ram=4096 \
---os-type=linux --controller=scsi,model=virtio-scsi \
---disk path=/kvm/ONTAPdeploy.raw,device=disk,bus=scsi,format=raw \
---network network=br100,portgroup=vlan6,model=virtio \
---console=pty --import --wait 0
-
-virsh console deploy
-deploy network show
-host show
-cluster show
-node show
+aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
+aggr create -aggregate aggr2 -diskcount 2 -node liyang-02 -mirror true
 ```
