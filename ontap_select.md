@@ -126,7 +126,7 @@ aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
 aggr create -aggregate aggr2 -diskcount 2 -node liyang-02 -mirror true
 ```
 ## nfs demo
-### aggr-->vserver-->volume-->lif-->nfs_service-->export_policy--map_vol_policy
+### aggr-->vserver-->volume-->lif-->nfs_service-->export_policy-->map_vol_policy
 ```
 aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
 vserver create -vserver nfs
@@ -144,4 +144,5 @@ export-policy rule create -vserver nfs -policyname liyang -protocol nfs3 -client
 vol modify -volume nfs01 -policy liyang
 export-policy rule show -policyname liyang -instance
 vol show -fields policy
+net int show -role data
 ```
