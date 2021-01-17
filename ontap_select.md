@@ -125,3 +125,22 @@ virsh pool-undefine select_pool
 aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
 aggr create -aggregate aggr2 -diskcount 2 -node liyang-02 -mirror true
 ```
+## demo nfs testing
+```
+aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
+vserver create -vserver nfs
+vol create -vserver nfs -volume nfs01 -size 100g -aggregate liyang-01 -junction-path /nfs
+net int create -vserver nfs -lif nfs -home-node liyang-01 -home-port e0c -role data -data-protocol nfs -address 192.168.6.106 -netmask 255.255.255.0
+
+vserver nfs create -access true -v3 enabled -v4.0 disabled -tcp enabled -vserver nfs
+vserver nfs modify -showmount enabled
+vserver nfs show 
+
+export-policy create -policyname liyang -vserver nfs
+export-policy rule create -vserver nfs -policyname default -protocol nfs3 -clientmatch 0.0.0.0/0 -rorule  none -rwrule none -superuser none
+export-policy rule create -vserver nfs -policyname liyang -protocol nfs3 -clientmatch 0.0.0.0/0 -rorule any -rwrule any -superuser any
+
+vol modify -volume nfs01 -policy liyang
+export-policy rule show -policyname liyang -instance
+vol show -fields policy
+```
