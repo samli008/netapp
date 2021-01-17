@@ -130,7 +130,7 @@ aggr create -aggregate aggr2 -diskcount 2 -node liyang-02 -mirror true
 aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
 vserver create -vserver nfs
 vol create -vserver nfs -volume nfs01 -size 100g -aggregate liyang-01 -junction-path /nfs
-net int create -vserver nfs -lif nfs -home-node liyang-01 -home-port e0c -role data -data-protocol nfs -address 192.168.6.106 -netmask 255.255.255.0
+net int create -vserver nfs -lif nfs -home-node liyang-01 -home-port e0a -role data -data-protocol nfs -address 192.168.6.106 -netmask 255.255.255.0
 
 vserver nfs create -access true -v3 enabled -v4.0 disabled -tcp enabled -vserver nfs
 vserver nfs modify -showmount enabled
