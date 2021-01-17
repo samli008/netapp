@@ -141,9 +141,10 @@ vserver nfs show
 export-policy create -policyname liyang -vserver nfs
 export-policy rule create -vserver nfs -policyname default -protocol nfs3 -clientmatch 0.0.0.0/0 -rorule  none -rwrule none -superuser none
 export-policy rule create -vserver nfs -policyname liyang -protocol nfs3 -clientmatch 0.0.0.0/0 -rorule any -rwrule any -superuser any
-
 vol modify -volume nfs01 -policy liyang
+
 export-policy rule show -policyname liyang -instance
 vol show -fields policy
+vol show -fields junction-path
 net int show -role data
 ```
