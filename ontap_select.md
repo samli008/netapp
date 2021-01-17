@@ -125,7 +125,8 @@ virsh pool-undefine select_pool
 aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
 aggr create -aggregate aggr2 -diskcount 2 -node liyang-02 -mirror true
 ```
-## demo nfs testing
+## nfs demo
+### aggr-->vserver-->volume-->lif-->nfs_service-->export_policy--map_vol_policy
 ```
 aggr create -aggregate aggr1 -diskcount 2 -node liyang-01 -mirror true
 vserver create -vserver nfs
