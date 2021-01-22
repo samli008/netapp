@@ -204,3 +204,7 @@ exit;
 
 esac
 ```
+## move script
+```
+virsh migrate $1 --unsafe --undefinesource --persistent --live --verbose qemu+ssh://$2/system
+```
