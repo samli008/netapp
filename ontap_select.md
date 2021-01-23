@@ -208,3 +208,9 @@ esac
 ```
 virsh migrate $1 --unsafe --undefinesource --persistent --live --verbose qemu+ssh://$2/system
 ```
+## HA select vm
+```
+virsh dumpxml liyang-01 > /etc/pacemaker/liyang-01.xml
+scp liyang-01.xml select02:/etc/pacemaker/
+pcs resource create liyang-01 VirtualDomain config=/etc/pacemaker/liyang-01.xml migration_transport=ssh meta allow-migrate=true
+```
